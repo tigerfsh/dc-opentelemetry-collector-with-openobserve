@@ -23,4 +23,5 @@ services:
       ZO_ROOT_USER_PASSWORD: "Complexpass#123"
     ports:
       - 5080:5080
+      - 5081:5081
 

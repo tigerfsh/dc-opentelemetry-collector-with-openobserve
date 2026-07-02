@@ -13,11 +13,14 @@ processors:
     timeout: 1s
 
 exporters:
-  otlp_http/openobserve:
-    endpoint: http://openobserve:5080/api/default
+  otlp_grpc/openobserve:
+    endpoint: openobserve:5081
     headers:
       Authorization: "Basic cm9vdEBleGFtcGxlLmNvbTpDb21wbGV4cGFzcyMxMjM="
+      organization: default
       stream-name: seller_center
+    tls:
+      insecure: true
 
 
 service:
@@ -25,13 +28,13 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_http/openobserve]
+      exporters: [otlp_grpc/openobserve]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_http/openobserve]
+      exporters: [otlp_grpc/openobserve]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_http/openobserve]
+      exporters: [otlp_grpc/openobserve]
 
