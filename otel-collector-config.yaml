@@ -1,0 +1,37 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    send_batch_size: 1
+    send_batch_max_size: 1
+    timeout: 1s
+
+exporters:
+  otlp_http/openobserve:
+    endpoint: http://openobserve:5080/api/default
+    headers:
+      Authorization: "Basic cm9vdEBleGFtcGxlLmNvbTpDb21wbGV4cGFzcyMxMjM="
+      stream-name: seller_center
+
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp_http/openobserve]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp_http/openobserve]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp_http/openobserve]
+
