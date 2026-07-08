@@ -2,7 +2,7 @@ version: '3'
 services:
   otel-collector:
     image: otel/opentelemetry-collector
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol/config.yaml
     ports:
@@ -16,7 +16,7 @@ services:
 
   openobserve:
     image: public.ecr.aws/zinclabs/openobserve:latest
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./data:/data
     environment:
