@@ -16,7 +16,7 @@ exporters:
   otlp_grpc/openobserve:
     endpoint: openobserve:5081
     headers:
-      Authorization: "${OPENOBSERVE_AUTH_TOKEN:-Basic cm9vdEBleGFtcGxlLmNvbTpDb21wbGV4cGFzcyMxMjM=}"
+      Authorization: "${OPENOBSERVE_AUTH_TOKEN}"
       organization: default
       stream-name: seller_center
     tls:
