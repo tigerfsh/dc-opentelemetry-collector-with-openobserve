@@ -1,3 +1,9 @@
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  pprof:
+    endpoint: 0.0.0.0:1888
+
 receivers:
   otlp:
     protocols:
@@ -8,9 +14,9 @@ receivers:
 
 processors:
   batch:
-    send_batch_size: 1
-    send_batch_max_size: 1
-    timeout: 1s
+    send_batch_size: 512
+    send_batch_max_size: 1024
+    timeout: 5s
 
 exporters:
   otlp_grpc/openobserve:
@@ -22,19 +28,35 @@ exporters:
     tls:
       insecure: true
 
+  debug:
+    verbosity: detailed
+    sampling_initial: 10
+    sampling_thereafter: 100
+
 
 service:
+  extensions: [health_check, pprof]
+  telemetry:
+    metrics:
+      level: detailed
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: 8888
+
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_grpc/openobserve]
+      exporters: [otlp_grpc/openobserve, debug]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_grpc/openobserve]
+      exporters: [otlp_grpc/openobserve, debug]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_grpc/openobserve]
+      exporters: [otlp_grpc/openobserve, debug]
 
